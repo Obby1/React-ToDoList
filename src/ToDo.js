@@ -1,24 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-function ToDo({ id, text, completed, removeToDo, ...props }) {
-  const styles = {
-    // width: `${width}px`,
-    // height: `${height}px`,
-    // backgroundColor: backgroundColor,
-    // add strike through here if completed?
+function ToDo({ id, text, completed, removeToDo, editToDo, update, ...props }) {
+    const [editTask, setEditTask] = useState(text);
+    const [isEditing, setIsEditing] = useState(false);
+
+    const toggleEdit = () => {
+        setIsEditing(edit => !edit);
+      };
+
+      const handleChange = evt => {
+        setEditTask(evt.target.value);
+      };
+    
+
+  const handleRemove = () => removeToDo(id);
+
+
+const handleUpdate = evt => {
+    evt.preventDefault();
+    update(id, editTask);
+    setIsEditing(false);
   };
 
-  const handleRemove = () => {
-    removeToDo(id);
-  };
+    // default todo view
+    let jsx = (
+        <div {...props}>
+            <li>{text}</li>
+            <button onClick={toggleEdit}>Edit</button>
+            <button onClick={handleRemove}>X</button>
+        </div>
+        );
 
-  return (
-    <div {...props}>
-        {text}
-      {/* <div style={styles}></div> */}
-      <button onClick={handleRemove}>X</button>
-    </div>
-  );
+    if (isEditing) {
+        jsx = (
+            <div {...props}>
+            <form onSubmit={handleUpdate}>
+                <input type="text" value={editTask} onChange={handleChange} data-testid="update-input" />
+                <button data-testid="update-button">Update!</button>
+            </form>
+            </div>
+        );
+        }
+
+    return jsx;
 }
 
 export default ToDo;

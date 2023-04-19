@@ -13,17 +13,14 @@ const ToDoList = () =>{
         setToDos((toDos)=>toDos.filter((toDo) => toDo.id !== id))
     }
 
-    // // finish this later
-    // const editTodo = (id, text) => {
-    //     setToDos((toDos)=>{
-    //         if (toDo.id === id){
-    //             toDo.text = text
-    //             // this needs work, finish later
-    //         }
-    //     })
-    // }
-
-
+    
+    const update = (id, text) => {
+        setToDos(toDos =>
+          toDos.map(todo =>
+            todo.id === id ? { ...todo, text } : todo
+          )
+        );
+      };
 
     return (
     <>
@@ -34,7 +31,8 @@ const ToDoList = () =>{
                     key={toDo.id}
                     id={toDo.id}
                     text={toDo.text}
-                    removeToDo={removeToDo} 
+                    removeToDo={removeToDo}
+                    update={update} 
                     data-testid="todo" 
                 />)})}
     </>
